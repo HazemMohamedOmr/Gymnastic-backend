@@ -15,6 +15,7 @@ namespace Gymnastic.Application.UseCases
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TrimPropertiesBehaviour<,>));
             services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
             services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
         }
