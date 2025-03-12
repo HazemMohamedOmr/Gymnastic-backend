@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using Gymnastic.Application.Dto.DTOs;
+using Gymnastic.Application.Interface.Infrastructure;
 using Gymnastic.Application.Interface.Persistence;
+using Gymnastic.Application.Interface.Services;
 using Gymnastic.Application.UseCases.Commons.Bases;
 using Gymnastic.Domain.Models;
-using Gymnastic.Infrastructure.Authentication;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -14,18 +15,23 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.RegisterCommand
     public class RegisterHandler : IRequestHandler<RegisterCommand, BaseResponse<AuthDTO>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly IJWTService _jwtService;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IJWTTokenService _jwtTokenService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IBackgroundJobService _backgroundJobService;
 
-        public RegisterHandler(IUnitOfWork unitOfWork, IMapper mapper, IJWTService jwtService, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        public RegisterHandler(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IJWTTokenService jwtTokenService,
+            RoleManager<IdentityRole> roleManager,
+            UserManager<ApplicationUser> userManager,
+            ISendEmailService sendEmailService,
+            IBackgroundJobService backgroundJobService)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _jwtService = jwtService ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
+            _jwtTokenService = jwtTokenService ?? throw new ArgumentNullException(nameof(jwtTokenService));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _backgroundJobService = backgroundJobService ?? throw new ArgumentNullException(nameof(backgroundJobService));
         }
 
         public async Task<BaseResponse<AuthDTO>> Handle(RegisterCommand command, CancellationToken cancellationToken)
@@ -52,10 +58,11 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.RegisterCommand
                 await _userManager.AddToRoleAsync(user, command.Role);
                 await _unitOfWork.CommitTransactionAsync();
 
-                var userClaims = await _userManager.GetClaimsAsync(user);
-                var roles = await _userManager.GetRolesAsync(user);
+                _backgroundJobService.Enqueue<ISendEmailService>(service => service.EmailVericiation(user.Id));
 
-                var jwtSecurityToken = _jwtService.GenerateToken(user, roles, userClaims);
+                // TODO: Should ignore what comes next but i will do it later
+
+                var jwtSecurityToken = await _jwtTokenService.CreateJwtToken(user);
 
                 var authDto = new AuthDTO
                 {

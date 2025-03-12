@@ -19,6 +19,8 @@
 
             public const string Register = $"{Base}/Register";
             public const string Login = $"{Base}/Login";
+            public const string VerifyEmail = $"{Base}/verify-email";
+            public const string SendEmailVerificaiton = $"{Base}/send-email-verification";
         }
     }
 }

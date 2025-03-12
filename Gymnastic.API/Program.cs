@@ -20,8 +20,9 @@ builder.Services.ConfigureIdentity();
 builder.Services.ConfigureInfrasturctureDependcies();
 builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.ConfigureMail(builder.Configuration);
+builder.Services.ConfigureHangfire(builder.Configuration);
 
-builder.Services.AddInjectionApplication();
+builder.Services.ConfigureApplicationDependcies();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -40,6 +41,7 @@ app.Services.DatabaseInitialize();
 
 app.AddMiddlewares();
 app.UseHttpsRedirection();
+app.AddHangfireDashboard();
 
 app.UseAuthentication();
 app.UseAuthorization();

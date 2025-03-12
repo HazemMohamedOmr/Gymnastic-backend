@@ -1,7 +1,11 @@
-﻿using Gymnastic.Infrastructure.Authentication;
+﻿using Gymnastic.Application.Interface.Infrastructure;
+using Gymnastic.Infrastructure.Authentication;
+using Gymnastic.Infrastructure.BackgroundJobs;
 using Gymnastic.Infrastructure.Helpers;
 using Gymnastic.Infrastructure.Mail;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -13,6 +17,21 @@ namespace Gymnastic.Infrastructure
     {
         public static void ConfigureInfrasturctureDependcies(this IServiceCollection services)
         {
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+        }
+
+        public static void ConfigureHangfire(this IServiceCollection services, IConfiguration Configuration)
+        {
+            services.AddScoped<IBackgroundJobService, HangfireService>();
+
+            services.AddHangfire(config =>
+                config.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddHangfireServer();
+        }
+
+        public static void AddHangfireDashboard(this IApplicationBuilder app)
+        {
+            app.UseHangfireDashboard();
         }
 
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration Configuration)

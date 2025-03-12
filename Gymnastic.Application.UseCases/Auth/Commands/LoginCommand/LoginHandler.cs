@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Gymnastic.Application.Dto.DTOs;
 using Gymnastic.Application.Interface.Persistence;
+using Gymnastic.Application.Interface.Services;
 using Gymnastic.Application.UseCases.Commons.Bases;
 using Gymnastic.Domain.Models;
 using Gymnastic.Infrastructure.Authentication;
@@ -15,15 +16,20 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.LoginCommand
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IJWTService _jwtService;
+        private readonly IJWTTokenService _jwtTokenService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public LoginHandler(IUnitOfWork unitOfWork, IMapper mapper, IJWTService jwtService, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        public LoginHandler(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IJWTTokenService jwtTokenService,
+            RoleManager<IdentityRole> roleManager,
+            UserManager<ApplicationUser> userManager)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _jwtService = jwtService ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _jwtTokenService = jwtTokenService ?? throw new ArgumentNullException(nameof(jwtTokenService));
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
@@ -37,9 +43,14 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.LoginCommand
                 if (user is null || !await _userManager.CheckPasswordAsync(user, command.Password))
                     return BaseResponse<AuthDTO>.Fail("Email or Password is incorrect!", StatusCodes.Status401Unauthorized);
 
-                var userClaims = await _userManager.GetClaimsAsync(user);
+                if (user.EmailConfirmed is false)
+                    return BaseResponse<AuthDTO>.Fail(
+                        "Please verify your email before logging in. Check your inbox for a verification link.",
+                        StatusCodes.Status403Forbidden);
+
+                var jwtSecurityToken = await _jwtTokenService.CreateJwtToken(user);
+
                 var roles = await _userManager.GetRolesAsync(user);
-                var jwtSecurityToken = _jwtService.GenerateToken(user, roles, userClaims);
 
                 var authDto = new AuthDTO
                 {
