@@ -21,11 +21,8 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.RegisterCommand
 
         public RegisterHandler(
             IUnitOfWork unitOfWork,
-            IMapper mapper,
             IJWTTokenService jwtTokenService,
-            RoleManager<IdentityRole> roleManager,
             UserManager<ApplicationUser> userManager,
-            ISendEmailService sendEmailService,
             IBackgroundJobService backgroundJobService)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
@@ -56,7 +53,7 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.RegisterCommand
                     return BaseResponse<AuthDTO>.Fail("Failed to register!", StatusCodes.Status400BadRequest, result.Errors);
 
                 await _userManager.AddToRoleAsync(user, command.Role);
-                await _unitOfWork.CommitTransactionAsync();
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 _backgroundJobService.Enqueue<ISendEmailService>(service => service.EmailVericiation(user.Id));
 

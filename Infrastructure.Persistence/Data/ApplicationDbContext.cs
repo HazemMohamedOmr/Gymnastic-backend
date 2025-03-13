@@ -15,6 +15,7 @@ namespace Gymnastic.Persistence.Data
         }
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrdersDetail { get; set; }
@@ -49,6 +50,7 @@ namespace Gymnastic.Persistence.Data
 
             builder.ApplyConfiguration(new ApplicationUserConfig());
             builder.ApplyConfiguration(new ProductConfig());
+            builder.ApplyConfiguration(new ProductImageConfig());
             builder.ApplyConfiguration(new CategoryConfig());
             builder.ApplyConfiguration(new OrderConfig());
             builder.ApplyConfiguration(new OrderDetailConfig());

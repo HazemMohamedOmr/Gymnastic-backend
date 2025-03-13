@@ -9,6 +9,7 @@ namespace Gymnastic.Application.Dto.DTOs
         public string? Description { get; set; }
         public required decimal Price { get; set; }
         public int Stock { get; set; }
-        public CategoryDTO Category { get; set; }
+        public CategoryDTO? Category { get; set; }
+        public List<ProductImageDTO>? Images { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using Gymnastic.Infrastructure.Authentication;
 using Gymnastic.Infrastructure.BackgroundJobs;
 using Gymnastic.Infrastructure.Helpers;
+using Gymnastic.Infrastructure.ImageService;
 using Gymnastic.Infrastructure.Mail;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,6 +19,12 @@ namespace Gymnastic.Infrastructure
         public static void ConfigureInfrasturctureDependcies(this IServiceCollection services)
         {
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+        }
+
+        public static void ConfigureCloudinary(this IServiceCollection services, IConfiguration Configuration)
+        {
+            services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
+            services.AddScoped<IImageService, CloudinaryService>();
         }
 
         public static void ConfigureHangfire(this IServiceCollection services, IConfiguration Configuration)

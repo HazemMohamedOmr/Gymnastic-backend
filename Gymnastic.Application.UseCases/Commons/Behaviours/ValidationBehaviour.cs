@@ -1,10 +1,7 @@
 ﻿using FluentValidation;
-using Gymnastic.Application.Dto.DTOs;
 using Gymnastic.Application.UseCases.Commons.Bases;
 using Gymnastic.Application.UseCases.Commons.Exceptions;
-using Gymnastic.Application.UseCases.Commons.Mappings;
 using MediatR;
-using System.Diagnostics;
 
 namespace Gymnastic.Application.UseCases.Commons.Behaviours
 {
