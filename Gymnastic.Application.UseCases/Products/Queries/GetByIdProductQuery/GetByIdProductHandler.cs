@@ -2,8 +2,9 @@
 using Gymnastic.Application.Dto.DTOs;
 using Gymnastic.Application.Interface.Persistence;
 using Gymnastic.Application.UseCases.Commons.Bases;
-using MediatR;
+using Gymnastic.Domain.Specification.ProductSpecs;
 using Microsoft.AspNetCore.Http;
+using MediatR;
 
 namespace Gymnastic.Application.UseCases.Products.Queries.GetByIdProductQuery
 {
@@ -22,11 +23,12 @@ namespace Gymnastic.Application.UseCases.Products.Queries.GetByIdProductQuery
         {
             try
             {
-                var product = await _unitOfWork.Product.GetByIdAsync(request.Id, cancellationToken);
+                var spec = new ProductByIdSpecification(request.Id);
+                var product = await _unitOfWork.Product.GetEntityWithSpec(spec, cancellationToken);
                 if (product is null)
                     return BaseResponse<ProductDTO>.Fail("Product Not Found", StatusCodes.Status404NotFound);
-                var productDTO = _mapper.Map<ProductDTO>(product);
-                return BaseResponse<ProductDTO>.Success(productDTO);
+                var productMapped = _mapper.Map<ProductDTO>(product);
+                return BaseResponse<ProductDTO>.Success(productMapped);
             }
             catch (Exception ex)
             {

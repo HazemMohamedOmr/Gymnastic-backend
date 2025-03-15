@@ -17,10 +17,10 @@ namespace Gymnastic.Infrastructure.ImageService
             _cloudinarySettings = cloudinary.Value;
 
             var account = new Account(
-                    _cloudinarySettings.CloudName,
-                    _cloudinarySettings.ApiKey,
-                    _cloudinarySettings.ApiSecret
-                );
+                _cloudinarySettings.CloudName,
+                _cloudinarySettings.ApiKey,
+                _cloudinarySettings.ApiSecret
+            );
 
             _cloudinary = new Cloudinary(account);
         }

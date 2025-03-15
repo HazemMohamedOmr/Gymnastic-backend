@@ -1,5 +1,7 @@
 ﻿using Gymnastic.Domain.Common;
 using Gymnastic.Domain.Specification;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Gymnastic.Application.Interface.Persistence
@@ -17,6 +19,13 @@ namespace Gymnastic.Application.Interface.Persistence
         Task<decimal> AverageAsync(Expression<Func<T, decimal>> selector, Expression<Func<T, bool>>? predicate = null);
         Task<bool> AnyAsync(Expression<Func<T, bool>>? predicate = null);
         Task<bool> AllAsync(Expression<Func<T, bool>> predicate);
+        Task<EntityEntry<T>> AddAsync(T entity);
+        IEnumerable<T> AddRange(IEnumerable<T> entities);
+        Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities);
+        T Update(T entity);
+        IEnumerable<T> UpdateRange(IEnumerable<T> entities);
+        void Delete(T entity);
+        void DeleteRange(IEnumerable<T> entities);
 
         //Task<int> CountAsync(ISpecification<T, TId> spec, CancellationToken cancellationToken = default);
         //Task<decimal> SumAsync(ISpecification<T, TId> spec, CancellationToken cancellationToken = default);

@@ -7,8 +7,7 @@ namespace Gymnastic.Application.UseCases.Products.Queries.GetByIdProductQuery
         public GetByIdProductValidator()
         {
             RuleFor(x => x.Id)
-                .NotEmpty()
-                .NotNull();
+                .NotNull().NotEmpty();
         }
     }
 }

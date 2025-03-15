@@ -10,8 +10,38 @@
             public const string Create = Base;
             public const string Get = $"{Base}/{{id}}";
             public const string GetAll = Base;
-            public const string Update = $"{Base}/{{id:guid}}";
-            public const string Delete = $"{Base}/{{id:guid}}";
+            public const string Update = $"{Base}/{{id}}";
+            public const string Delete = $"{Base}/{{id}}";
+        }
+        public static class Category
+        {
+            private const string Base = $"{ApiBase}/categories";
+
+            public const string Create = Base;
+            public const string Get = $"{Base}/{{id}}";
+            public const string GetAll = Base;
+            public const string Update = $"{Base}/{{id}}";
+            public const string Delete = $"{Base}/{{id}}";
+        }
+        public static class Cart
+        {
+            private const string Base = $"{ApiBase}/cart";
+
+            public const string Create = Base;
+            public const string Get = $"{Base}/{{id}}";
+            public const string GetAll = Base;
+            public const string Update = $"{Base}/{{id}}";
+            public const string Delete = $"{Base}/{{id}}";
+        }
+        public static class Wishlist
+        {
+            private const string Base = $"{ApiBase}/wishlist";
+
+            public const string Create = Base;
+            public const string Get = $"{Base}/{{id}}";
+            public const string GetAll = Base;
+            public const string Update = $"{Base}/{{id}}";
+            public const string Delete = $"{Base}/{{id}}";
         }
         public static class Auth
         {

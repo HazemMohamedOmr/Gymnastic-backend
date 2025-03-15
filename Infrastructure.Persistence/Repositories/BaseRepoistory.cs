@@ -205,12 +205,6 @@ namespace Gymnastic.Persistence.Repositories
         {
             var query = _context.Set<T>().AsQueryable();
 
-            if (spec.AsSplitQuery)
-                query = query.AsSplitQuery();
-
-            if (spec.AsNoTracking)
-                query = query.AsNoTracking();
-
             if (spec.Criteria != null)
                 query = query.Where(spec.Criteria);
 
@@ -226,6 +220,12 @@ namespace Gymnastic.Persistence.Repositories
 
             if (spec.Take.HasValue)
                 query = query.Take(spec.Take.Value);
+
+            if (spec.AsSplitQuery)
+                query = query.AsSplitQuery();
+
+            if (spec.AsNoTracking)
+                query = query.AsNoTracking();
             return query;
         }
 

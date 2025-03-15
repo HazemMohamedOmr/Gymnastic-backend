@@ -1,6 +1,7 @@
 ﻿using Gymnastic.Application.Dto.DTOs;
 using Gymnastic.Application.UseCases.Commons.Bases;
 using MediatR;
+using System.ComponentModel.DataAnnotations;
 
 namespace Gymnastic.Application.UseCases.Auth.Commands.RegisterCommand
 {

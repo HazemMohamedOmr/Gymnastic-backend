@@ -2,7 +2,7 @@
 
 namespace Gymnastic.Domain.Models
 {
-    public class Product : BaseEntity<int>
+    public class Product : BaseEntity<int>, ISoftDeletable
     {
         public required string Name { get; set; }
         public string? Description { get; set; }
@@ -11,5 +11,6 @@ namespace Gymnastic.Domain.Models
         public required int CategoryId { get; set; }
         public Category Category { get; set; }
         public ICollection<ProductImage>? Images { get; set; }
+        public bool IsDeleted { get; set; } = false;
     }
 }

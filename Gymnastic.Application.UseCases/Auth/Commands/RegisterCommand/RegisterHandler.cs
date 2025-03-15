@@ -53,6 +53,13 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.RegisterCommand
                     return BaseResponse<AuthDTO>.Fail("Failed to register!", StatusCodes.Status400BadRequest, result.Errors);
 
                 await _userManager.AddToRoleAsync(user, command.Role);
+
+                var cart = new Cart { UserId = user.Id }; // TODO : Check wtf is that
+                var wishlist = new Wishlist { UserId = user.Id };
+
+                await _unitOfWork.Cart.AddAsync(cart);
+                await _unitOfWork.Wishlist.AddAsync(wishlist);
+
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
                 _backgroundJobService.Enqueue<ISendEmailService>(service => service.EmailVericiation(user.Id));

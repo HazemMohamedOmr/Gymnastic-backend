@@ -2,7 +2,7 @@
 
 namespace Gymnastic.Domain.Models
 {
-    public class UserAddress : BaseEntity<int>
+    public class UserAddress : BaseEntity<int>, ISoftDeletable
     {
         public required string UserId { get; set; }
         public ApplicationUser User { get; set; }
@@ -12,5 +12,6 @@ namespace Gymnastic.Domain.Models
         public string? State { get; set; }
         public string? ZipCode { get; set; }
         public required string Country { get; set; }
+        public bool IsDeleted { get; set; } = false;
     }
 }
