@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
 namespace Gymnastic.Application.UseCases.Products.Commands.DeleteProductCommand
 {
-    internal class DeleteProductValidator
+    public class DeleteProductValidator : AbstractValidator<DeleteProductCommand>
     {
+        public DeleteProductValidator()
+        {
+            RuleFor(c => c.Id)
+                .GreaterThan(0).WithMessage("Invalid Id");
+        }
     }
 }

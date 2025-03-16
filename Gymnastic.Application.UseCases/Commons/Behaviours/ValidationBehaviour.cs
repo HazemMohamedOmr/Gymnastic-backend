@@ -20,11 +20,15 @@ namespace Gymnastic.Application.UseCases.Commons.Behaviours
             {
                 var context = new ValidationContext<TRequest>(request);
                 var validationResults = await Task.WhenAll(_validators.Select(v => v.ValidateAsync(context, cancellationToken)));
-
+                Console.WriteLine(validationResults.SelectMany(r => r.Errors).ToList());
                 var failures = validationResults
                     .Where(r => r.Errors.Any())
                     .SelectMany(r => r.Errors)
-                    .Select(r => new BaseError() { PropertyMessage = r.PropertyName, ErrorMessage = r.ErrorMessage })
+                    .Select(r => new BaseError()
+                    {
+                        PropertyMessage = r.CustomState is not null ? r.CustomState.ToString() : r.PropertyName,
+                        ErrorMessage = r.ErrorMessage
+                    })
                     .ToList();
 
                 if (failures.Any())

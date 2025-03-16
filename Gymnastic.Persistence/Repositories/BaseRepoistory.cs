@@ -87,7 +87,6 @@ namespace Gymnastic.Persistence.Repositories
 
         public async Task<EntityEntry<T>> AddAsync(T entity)
         {
-            entity.UpdatedAt = DateTime.UtcNow;
             return await _dbSet.AddAsync(entity);
         }
 

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Gymnastic.Application.UseCases.Commons.Bases;
+using MediatR;
 
 namespace Gymnastic.Application.UseCases.Products.Commands.DeleteProductCommand
 {
-    internal class DeleteProductCommand
+    public class DeleteProductCommand : IRequest<BaseResponse<bool>>
     {
+        public int Id { get; set; }
     }
 }

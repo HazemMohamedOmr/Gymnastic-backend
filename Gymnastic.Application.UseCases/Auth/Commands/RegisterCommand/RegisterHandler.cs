@@ -60,7 +60,7 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.RegisterCommand
 
                 await _userManager.AddToRoleAsync(user, command.Role);
 
-                var cart = new Cart { UserId = user.Id }; // TODO : Check wtf is that
+                var cart = new Cart { UserId = user.Id }; // TODO : Check wtf is that logic [need better register implementation]
                 var wishlist = new Wishlist { UserId = user.Id };
 
                 await _unitOfWork.Cart.AddAsync(cart);
