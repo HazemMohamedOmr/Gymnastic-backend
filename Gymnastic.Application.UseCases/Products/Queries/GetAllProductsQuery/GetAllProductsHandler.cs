@@ -18,31 +18,6 @@ namespace Gymnastic.Application.UseCases.Products.Queries.GetAllProductsQuery
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        //public async Task<BaseResponse<IEnumerable<ProductDTO>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
-        //{
-        //    try
-        //    {
-        //        var spec = new AllProductsSpecificaitons(
-        //            request.SearchTerm,
-        //            request.CategoryId,
-        //            request.MinPrice,
-        //            request.MaxPrice,
-        //            request.pageNumber,
-        //            request.pageSize,
-        //            request.OrderBy,
-        //            request.IsDecending);
-
-        //        var products = await _unitOfWork.Product.ListAsync(spec, cancellationToken);
-        //        var count = await _unitOfWork.Product.CountAsync();
-        //        var dto = _mapper.Map<IEnumerable<ProductDTO>>(products);
-        //        return BaseResponse<IEnumerable<ProductDTO>>.Success(dto);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BaseResponse<IEnumerable<ProductDTO>>.Fail(ex.Message);
-        //    }
-        //}
-
         public async Task<BaseResponse<BasePagination<IEnumerable<ProductDTO>>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
             try

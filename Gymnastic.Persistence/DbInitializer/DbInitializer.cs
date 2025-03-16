@@ -8,7 +8,7 @@ namespace Gymnastic.Persistence.DbInitializer
     {
         public static void Initialize(RoleManager<IdentityRole> roleManager)
         {
-            string[] roles = { RoleConstants.Admin, RoleConstants.Customer, RoleConstants.Coash };
+            string[] roles = { RoleConstants.Admin, RoleConstants.Customer, RoleConstants.Coach };
 
             foreach (var role in roles)
             {

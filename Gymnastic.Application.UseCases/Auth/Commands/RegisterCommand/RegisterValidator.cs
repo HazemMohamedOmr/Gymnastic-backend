@@ -9,7 +9,7 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.RegisterCommand
         [
             RoleConstants.Admin,
             RoleConstants.Customer,
-            RoleConstants.Coash
+            RoleConstants.Coach
         ];
 
         public RegisterValidator()

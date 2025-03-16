@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gymnastic.API", "Gymnastic.API\Gymnastic.API.csproj", "{54AAF7C8-BF40-4643-9F91-16F55BD97337}"
+	ProjectSection(ProjectDependencies) = postProject
+		{82D7BC87-ED04-4115-9D37-51F4D5C040BA} = {82D7BC87-ED04-4115-9D37-51F4D5C040BA}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{0601DAC3-D886-48C2-8147-9A9E3CB13D67}"
 EndProject
@@ -23,7 +26,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gymnastic.Application.Dto",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gymnastic.Infrastructure", "Gymnastic.Infrastructure\Gymnastic.Infrastructure.csproj", "{04B9D905-EC55-46AD-9EB3-24A899E729A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gymnastic.Persistence", "Infrastructure.Persistence\Gymnastic.Persistence.csproj", "{EDB8694D-421D-4413-9914-4336CB91A6CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gymnastic.Persistence", "Gymnastic.Persistence\Gymnastic.Persistence.csproj", "{82D7BC87-ED04-4115-9D37-51F4D5C040BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,10 +58,10 @@ Global
 		{04B9D905-EC55-46AD-9EB3-24A899E729A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04B9D905-EC55-46AD-9EB3-24A899E729A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04B9D905-EC55-46AD-9EB3-24A899E729A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EDB8694D-421D-4413-9914-4336CB91A6CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EDB8694D-421D-4413-9914-4336CB91A6CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EDB8694D-421D-4413-9914-4336CB91A6CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EDB8694D-421D-4413-9914-4336CB91A6CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82D7BC87-ED04-4115-9D37-51F4D5C040BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82D7BC87-ED04-4115-9D37-51F4D5C040BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82D7BC87-ED04-4115-9D37-51F4D5C040BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82D7BC87-ED04-4115-9D37-51F4D5C040BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +73,6 @@ Global
 		{051512ED-31C1-4129-8596-B8EF57ADB912} = {0601DAC3-D886-48C2-8147-9A9E3CB13D67}
 		{D884CFF0-D992-42B6-BC88-E47B0538613C} = {0601DAC3-D886-48C2-8147-9A9E3CB13D67}
 		{04B9D905-EC55-46AD-9EB3-24A899E729A9} = {D72809FD-448E-4BF3-ABB7-54A567F4FB90}
-		{EDB8694D-421D-4413-9914-4336CB91A6CD} = {D72809FD-448E-4BF3-ABB7-54A567F4FB90}
+		{82D7BC87-ED04-4115-9D37-51F4D5C040BA} = {D72809FD-448E-4BF3-ABB7-54A567F4FB90}
 	EndGlobalSection
 EndGlobal

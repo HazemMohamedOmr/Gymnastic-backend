@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
       <PrivateAssets>all</PrivateAssets>
@@ -21,7 +22,7 @@
     <ProjectReference Include="..\Gymnastic.Application.UseCases\Gymnastic.Application.UseCases.csproj" />
     <ProjectReference Include="..\Gymnastic.Domain\Gymnastic.Domain.csproj" />
     <ProjectReference Include="..\Gymnastic.Infrastructure\Gymnastic.Infrastructure.csproj" />
-    <ProjectReference Include="..\Infrastructure.Persistence\Gymnastic.Persistence.csproj" />
+    <ProjectReference Include="..\Gymnastic.Persistence\Gymnastic.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

@@ -45,26 +45,30 @@ namespace Gymnastic.Domain.Specification.ProductSpecs
             // Sorting
             if (!string.IsNullOrEmpty(orderBy))
             {
-                if (isDecending)
+                var property = typeof(Product).GetProperties()
+                    .FirstOrDefault(p => string.Equals(p.Name, orderBy, StringComparison.OrdinalIgnoreCase));
+                if (isDecending && property is not null)
                 {
-                    AddOrderByDescending(p => EF.Property<object>(p, orderBy));
+                    AddOrderByDescending(p => EF.Property<Product>(p, property.Name));
                 }
-                else
+                else if (property is not null)
                 {
-                    AddOrderBy(p => EF.Property<object>(p, orderBy));
+                    {
+                        AddOrderBy(p => EF.Property<Product>(p, property.Name));
+                    }
                 }
-            }
 
-            // Pagination
-            if (pageNumber is not null && pageSize is not null)
-            {
-                ApplyPaging(((int)pageNumber - 1) * (int)pageSize, (int)pageSize);
-            }
+                // Pagination
+                if (pageNumber is not null && pageSize is not null)
+                {
+                    ApplyPaging(((int)pageNumber - 1) * (int)pageSize, (int)pageSize);
+                }
 
-            // Always include related data
-            AddInclude(p => p.Category);
-            AddInclude(p => p.Images);
-            EnableSplitQuery();
+                // Always include related data
+                AddInclude(p => p.Category);
+                AddInclude(p => p.Images);
+                EnableSplitQuery();
+            }
         }
     }
 }

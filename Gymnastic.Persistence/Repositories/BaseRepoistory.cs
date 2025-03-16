@@ -87,6 +87,7 @@ namespace Gymnastic.Persistence.Repositories
 
         public async Task<EntityEntry<T>> AddAsync(T entity)
         {
+            entity.UpdatedAt = DateTime.UtcNow;
             return await _dbSet.AddAsync(entity);
         }
 
@@ -98,6 +99,9 @@ namespace Gymnastic.Persistence.Repositories
 
         public async Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities)
         {
+            foreach (var entity in entities) // TODO: Check for better approch
+                entity.UpdatedAt = DateTime.UtcNow;
+
             await _dbSet.AddRangeAsync(entities);
             return entities;
         }
