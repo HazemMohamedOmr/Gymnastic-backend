@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Gymnastic.Application.Dto.Contracts.Requests;
 using Gymnastic.Application.Dto.DTOs;
 using Gymnastic.Domain.Models;
 
@@ -9,6 +10,9 @@ namespace Gymnastic.Application.UseCases.Commons.Mappings
         public ProductMapper()
         {
             CreateMap<Product, ProductDTO>().ReverseMap();
+            CreateMap<CreateProductRequest, Product>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Images, opt => opt.Ignore());
         }
     }
 }

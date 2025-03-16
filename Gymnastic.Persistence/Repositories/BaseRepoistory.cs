@@ -99,9 +99,6 @@ namespace Gymnastic.Persistence.Repositories
 
         public async Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities)
         {
-            foreach (var entity in entities) // TODO: Check for better approch
-                entity.UpdatedAt = DateTime.UtcNow;
-
             await _dbSet.AddRangeAsync(entities);
             return entities;
         }
@@ -116,9 +113,8 @@ namespace Gymnastic.Persistence.Repositories
         public IEnumerable<T> UpdateRange(IEnumerable<T> entities)
         {
             foreach (var entity in entities)
-            {
                 entity.UpdatedAt = DateTime.UtcNow;
-            }
+
             _dbSet.UpdateRange(entities);
             return entities;
         }

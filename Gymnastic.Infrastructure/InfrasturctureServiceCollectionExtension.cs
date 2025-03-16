@@ -25,6 +25,7 @@ namespace Gymnastic.Infrastructure
         {
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
             services.AddScoped<IImageService, CloudinaryService>();
+            services.AddScoped<IImageSettings, CloudinarySettings>();
         }
 
         public static void ConfigureHangfire(this IServiceCollection services, IConfiguration Configuration)

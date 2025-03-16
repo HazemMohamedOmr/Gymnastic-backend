@@ -4,6 +4,9 @@ using Gymnastic.Application.Interface.Persistence;
 using Gymnastic.Application.UseCases.Commons.Bases;
 using Gymnastic.Domain.Specification.ProductSpecs;
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 
 namespace Gymnastic.Application.UseCases.Products.Queries.GetAllProductsQuery
 {
@@ -11,11 +14,13 @@ namespace Gymnastic.Application.UseCases.Products.Queries.GetAllProductsQuery
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _environment;
 
-        public GetAllProductsHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public GetAllProductsHandler(IUnitOfWork unitOfWork, IMapper mapper, IWebHostEnvironment environment)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
 
         public async Task<BaseResponse<BasePagination<IEnumerable<ProductDTO>>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
@@ -46,7 +51,11 @@ namespace Gymnastic.Application.UseCases.Products.Queries.GetAllProductsQuery
             }
             catch (Exception ex)
             {
-                return BaseResponse<BasePagination<IEnumerable<ProductDTO>>>.Fail(ex.Message);
+                if (_environment.IsDevelopment())
+                    return BaseResponse<BasePagination<IEnumerable<ProductDTO>>>.Fail(ex.Message);
+
+                return BaseResponse<BasePagination<IEnumerable<ProductDTO>>>.Fail("An unexpected error occurred",
+                    StatusCodes.Status500InternalServerError);
             }
         }
     }

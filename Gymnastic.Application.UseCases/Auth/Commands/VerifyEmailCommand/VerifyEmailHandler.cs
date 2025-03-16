@@ -1,24 +1,24 @@
-﻿using Gymnastic.Application.Interface.Persistence;
+﻿using Gymnastic.Application.Dto.DTOs;
 using Gymnastic.Application.UseCases.Commons.Bases;
 using Gymnastic.Domain.Models;
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gymnastic.Application.UseCases.Auth.Commands.VerifyEmailCommand
 {
     public class VerifyEmailHandler : IRequestHandler<VerifyEmailCommand, BaseResponse<bool>>
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IWebHostEnvironment _environment;
 
-        public VerifyEmailHandler(UserManager<ApplicationUser> userManager)
+        public VerifyEmailHandler(UserManager<ApplicationUser> userManager, IWebHostEnvironment environment)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
 
         public async Task<BaseResponse<bool>> Handle(VerifyEmailCommand command, CancellationToken cancellationToken)
@@ -44,7 +44,11 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.VerifyEmailCommand
             }
             catch (Exception ex)
             {
-                return BaseResponse<bool>.Fail($"Verification failed: {ex.Message}");
+                if (_environment.IsDevelopment())
+                    return BaseResponse<bool>.Fail($"Verification failed: {ex.Message}");
+
+                return BaseResponse<bool>.Fail("An unexpected error occurred",
+                    StatusCodes.Status500InternalServerError);
             }
         }
     }

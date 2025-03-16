@@ -1,37 +1,34 @@
 ﻿using AutoMapper;
 using Gymnastic.Application.Dto.DTOs;
-using Gymnastic.Application.Interface.Persistence;
 using Gymnastic.Application.Interface.Services;
 using Gymnastic.Application.UseCases.Commons.Bases;
 using Gymnastic.Domain.Models;
-using Gymnastic.Infrastructure.Authentication;
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Hosting;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace Gymnastic.Application.UseCases.Auth.Commands.LoginCommand
 {
     public class LoginHandler : IRequestHandler<LoginCommand, BaseResponse<AuthDTO>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
         private readonly IJWTTokenService _jwtTokenService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IWebHostEnvironment _environment;
 
         public LoginHandler(
-            IUnitOfWork unitOfWork,
-            IMapper mapper,
             IJWTTokenService jwtTokenService,
             RoleManager<IdentityRole> roleManager,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IWebHostEnvironment environment)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _jwtTokenService = jwtTokenService ?? throw new ArgumentNullException(nameof(jwtTokenService));
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
 
         public async Task<BaseResponse<AuthDTO>> Handle(LoginCommand command, CancellationToken cancellationToken)
@@ -56,7 +53,7 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.LoginCommand
                 {
                     IsAuthenticated = true,
                     Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                    Email = user.Email,
+                    Email = user.Email!,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     ExpiresOn = jwtSecurityToken.ValidTo,
@@ -67,7 +64,11 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.LoginCommand
             }
             catch (Exception ex)
             {
-                return BaseResponse<AuthDTO>.Fail(ex.Message);
+                if (_environment.IsDevelopment())
+                    return BaseResponse<AuthDTO>.Fail(ex.Message);
+
+                return BaseResponse<AuthDTO>.Fail("An unexpected error occurred",
+                    StatusCodes.Status500InternalServerError);
             }
         }
     }

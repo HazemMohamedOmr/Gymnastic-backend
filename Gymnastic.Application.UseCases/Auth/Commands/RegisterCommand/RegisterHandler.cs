@@ -6,8 +6,11 @@ using Gymnastic.Application.Interface.Services;
 using Gymnastic.Application.UseCases.Commons.Bases;
 using Gymnastic.Domain.Models;
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace Gymnastic.Application.UseCases.Auth.Commands.RegisterCommand
@@ -18,17 +21,20 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.RegisterCommand
         private readonly IJWTTokenService _jwtTokenService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IBackgroundJobService _backgroundJobService;
+        private readonly IWebHostEnvironment _environment;
 
         public RegisterHandler(
             IUnitOfWork unitOfWork,
             IJWTTokenService jwtTokenService,
             UserManager<ApplicationUser> userManager,
-            IBackgroundJobService backgroundJobService)
+            IBackgroundJobService backgroundJobService,
+            IWebHostEnvironment environment)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _jwtTokenService = jwtTokenService ?? throw new ArgumentNullException(nameof(jwtTokenService));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _backgroundJobService = backgroundJobService ?? throw new ArgumentNullException(nameof(backgroundJobService));
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
 
         public async Task<BaseResponse<AuthDTO>> Handle(RegisterCommand command, CancellationToken cancellationToken)
@@ -84,7 +90,11 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.RegisterCommand
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
-                return BaseResponse<AuthDTO>.Fail(ex.Message);
+                if (_environment.IsDevelopment())
+                    return BaseResponse<AuthDTO>.Fail(ex.Message);
+
+                return BaseResponse<AuthDTO>.Fail("An unexpected error occurred",
+                    StatusCodes.Status500InternalServerError);
             }
         }
     }

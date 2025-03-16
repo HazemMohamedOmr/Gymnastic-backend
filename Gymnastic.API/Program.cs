@@ -21,6 +21,7 @@ builder.Services.ConfigureInfrasturctureDependcies();
 builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.ConfigureMail(builder.Configuration);
 builder.Services.ConfigureHangfire(builder.Configuration);
+builder.Services.ConfigureCloudinary(builder.Configuration);
 
 builder.Services.ConfigureApplicationDependcies();
 

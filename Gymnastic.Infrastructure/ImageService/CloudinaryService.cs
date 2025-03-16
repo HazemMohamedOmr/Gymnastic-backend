@@ -46,6 +46,5 @@ namespace Gymnastic.Infrastructure.ImageService
             var deletionParams = new DeletionParams(publicId);
             await _cloudinary.DestroyAsync(deletionParams);
         }
-
     }
 }

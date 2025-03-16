@@ -1,11 +1,15 @@
-﻿using Gymnastic.Application.Interface.Infrastructure;
+﻿using Gymnastic.Application.Dto.DTOs;
+using Gymnastic.Application.Interface.Infrastructure;
 using Gymnastic.Application.Interface.Persistence;
 using Gymnastic.Application.Interface.Services;
 using Gymnastic.Application.UseCases.Commons.Bases;
 using Gymnastic.Domain.Models;
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Gymnastic.Application.UseCases.Auth.Commands.SendEmailVerificationCommand
 {
@@ -13,11 +17,13 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.SendEmailVerificationComm
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IBackgroundJobService _backgroundJobService;
+        private readonly IWebHostEnvironment _environment;
 
-        public SendEmailVerificationHandler(UserManager<ApplicationUser> userManager, IBackgroundJobService backgroundJobService)
+        public SendEmailVerificationHandler(UserManager<ApplicationUser> userManager, IBackgroundJobService backgroundJobService, IWebHostEnvironment environment)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _backgroundJobService = backgroundJobService ?? throw new ArgumentNullException(nameof(backgroundJobService));
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
 
         public async Task<BaseResponse<bool>> Handle(SendEmailVerificationCommand command, CancellationToken cancellationToken)
@@ -37,7 +43,11 @@ namespace Gymnastic.Application.UseCases.Auth.Commands.SendEmailVerificationComm
             }
             catch (Exception ex)
             {
-                return BaseResponse<bool>.Fail($"Failed to resend verification email: {ex.Message}", StatusCodes.Status500InternalServerError);
+                if (_environment.IsDevelopment())
+                    return BaseResponse<bool>.Fail($"Failed to resend verification email: {ex.Message}", StatusCodes.Status500InternalServerError);
+
+                return BaseResponse<bool>.Fail("An unexpected error occurred",
+                    StatusCodes.Status500InternalServerError);
             }
         }
     }
