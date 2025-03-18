@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 
 namespace Gymnastic.Domain.Specification
 {
@@ -6,6 +7,8 @@ namespace Gymnastic.Domain.Specification
     {
         Expression<Func<T, bool>> Criteria { get; }
         List<Expression<Func<T, object>>> Includes { get; }
+        List<string> IncludeStrings { get; }
+        public Func<IQueryable<T>, IIncludableQueryable<T, object>> IncludeExpressions { get; }
         Expression<Func<T, object>> OrderBy { get; }
         Expression<Func<T, object>> OrderByDescending { get; }
         int? Take { get; }

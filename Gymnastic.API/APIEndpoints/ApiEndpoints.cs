@@ -43,6 +43,19 @@
             public const string Update = $"{Base}/{{id}}";
             public const string Delete = $"{Base}/{{id}}";
         }
+
+        public static class Customer
+        {
+            private const string Base = $"{ApiBase}/customers";
+            public const string Get = $"{Base}/{{id}}";
+
+            public const string Update = $"{Base}/{{id}}";
+            public const string Delete = $"{Base}/{{id}}";
+            public const string GetCartItems = $"{Base}/Cart";
+            public const string AddCartItem = $"{Base}/Cart";
+            public const string DeleteCartItem = $"{Base}/Cart/{{id}}";
+            public const string UpdateCartItemQuantity = $"{Base}/Cart/{{id}}";
+        }
         public static class Auth
         {
             private const string Base = $"{ApiBase}/Auth";

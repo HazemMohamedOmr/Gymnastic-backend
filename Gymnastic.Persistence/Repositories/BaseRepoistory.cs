@@ -209,8 +209,15 @@ namespace Gymnastic.Persistence.Repositories
 
             query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
 
+            query = spec.IncludeStrings.Aggregate(query, (current, include) => current.Include(include));
+
+            // Apply Include-ThenInclude chains if any
+            if (spec.IncludeExpressions != null)
+                query = spec.IncludeExpressions(query);
+
             if (spec.OrderBy != null)
                 query = query.OrderBy(spec.OrderBy);
+
             else if (spec.OrderByDescending != null)
                 query = query.OrderByDescending(spec.OrderByDescending);
 
