@@ -43,8 +43,12 @@ namespace Gymnastic.Application.UseCases.Carts.Commands.AddToCartCommand
                 if (cart.Id != request.CartId)
                     return BaseResponse<CartItemsDTO>.Fail("Invalid Cart", StatusCodes.Status409Conflict);
 
-                if(await _unitOfWork.Product.GetByIdAsync(request.ProductId) is null)
+                var product = await _unitOfWork.Product.GetByIdAsync(request.ProductId);
+                if (product is null)
                     return BaseResponse<CartItemsDTO>.Fail("Invalid Product", StatusCodes.Status409Conflict);
+
+                if (product.Stock < request.Quantity)
+                    return BaseResponse<CartItemsDTO>.Fail("Insufficent Stock", StatusCodes.Status400BadRequest);
 
                 var productIsExist = cart.CartItems?.FirstOrDefault(c => c.ProductId == request.ProductId);
                 if (productIsExist is not null)

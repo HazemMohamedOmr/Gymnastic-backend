@@ -44,8 +44,12 @@ namespace Gymnastic.Application.UseCases.Carts.Commands.UpdateCartItemQuantityCo
                     return BaseResponse<bool>.Fail("Invalid Operation", StatusCodes.Status409Conflict);
 
                 var newQuantity = cartItem.Quantity + request.Delta;
-                if (newQuantity < 1)
-                    return BaseResponse<bool>.Fail("Quantity cannot be Less than 1", StatusCodes.Status400BadRequest);
+                if (newQuantity < 1 && newQuantity > 5)
+                    return BaseResponse<bool>.Fail("Quantity cannot be Less than 1 or Greater than 5", StatusCodes.Status400BadRequest);
+
+                var product = await _unitOfWork.Product.GetByIdAsync(cartItem.ProductId);
+                if (product!.Stock < newQuantity)
+                    return BaseResponse<bool>.Fail("Insufficent Stock", StatusCodes.Status400BadRequest);
 
                 cartItem.Quantity = newQuantity;
                 await _unitOfWork.SaveAsync(cancellationToken);
